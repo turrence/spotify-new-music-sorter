@@ -1,3 +1,5 @@
 app-env
 .vscode
+.cache*
+
 /venv
