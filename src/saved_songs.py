@@ -1,15 +1,10 @@
 from datetime import datetime as dt
 from auth_token import sp
 
-import pprint
-
-# gets liked songs
-pp = pprint.PrettyPrinter(indent=2)
-
 # returns a list of song ids
 def get_unadded_songs(dt_threshold):
     song_ids = []
-    chunks, offset = 20, 0
+    chunks, offset = 20, 0                               
     while True:
         songs_liked = sp.current_user_saved_tracks(chunks, offset) # need to determine how many songs to get
         for song in songs_liked['items']:
