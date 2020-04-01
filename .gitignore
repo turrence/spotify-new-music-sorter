@@ -2,6 +2,6 @@ app-env
 .vscode
 __pycache__
 cache/
-cache*
+.cache*
 /venv
 /env
