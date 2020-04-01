@@ -13,8 +13,3 @@ if len(SONGS_TO_BE_ADDED) < 1:
     print("no songs to be added")
 else:
     sp.user_playlist_add_tracks(sp.me()['id'], TARGET_PLAYLIST, SONGS_TO_BE_ADDED)
-
-
-
-
-

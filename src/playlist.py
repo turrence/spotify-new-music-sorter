@@ -17,7 +17,7 @@ def get_current_season(now) -> str:
 
 # returns the playlist id based on date
 def get_target_playlist(date) -> str:
-    # december of 2019 creates playlist "winter 2020"
+    # december of 2019 looks for playlist "winter 2020"
     target_playlist_name = get_current_season(date)+ " " + str(date.year if date.month != 12 else date.year+1)
     chunk, offset = 50, 0
     all_playlists = {}
@@ -38,8 +38,7 @@ def get_target_playlist(date) -> str:
 
     if target_playlist_name not in all_playlists:
         resp = sp.user_playlist_create(sp.me()['id'], target_playlist_name, public=False, 
-            description='AUTOMATED PLAYLIST - MODIFYING THIS PLAYLIST MAY RESULT IN UNEXPECTED BEHAVIORS' +
-            '(you can change the description tho)')
+            description='AUTOMATED PLAYLIST - https://github.com/turrence/spotify-new-music-sorter')
         return resp['id']
     else:
         return all_playlists[target_playlist_name]
