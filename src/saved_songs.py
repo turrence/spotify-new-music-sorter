@@ -19,9 +19,5 @@ def get_unadded_songs(dt_threshold):
                 return song_ids
         offset += chunks
 
-# date-added format: 2020-03-30T02:38:11Z
-# -----------------: yyyy-dd-mmThh:mm:ss(TZD)
-# TZD is TimeZoneDesignator: Z means UTC
-
 
 
