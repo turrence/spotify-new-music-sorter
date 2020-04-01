@@ -17,16 +17,16 @@ def get_current_season(now) -> str:
 
 # returns the playlist id based on date
 def get_target_playlist(date) -> str:
+        """
+    ASSUMPTIONS: a user has no duplicate playlist names
+    In the case that a user has a duplicate playlist name, the script will modify
+    the one 'lower' in the user's playlist library
+    Solution: no intuitive workaround
+    """
     # december of 2019 looks for playlist "winter 2020"
     target_playlist_name = get_current_season(date)+ " " + str(date.year if date.month != 12 else date.year+1)
     chunk, offset = 50, 0
     all_playlists = {}
-    """
-    ASSUMPTIONS: a user has no duplicate playlist names
-
-    in the case that a user has a duplicate playlist name, the script will modify
-    the one 'lower' in the user's playlist library
-    """
     while True: 
         playlist_info = sp.current_user_playlists(chunk, offset)
         for item in playlist_info['items']:
@@ -45,7 +45,10 @@ def get_target_playlist(date) -> str:
 
 # returns a datetime object of the most recently added song of a playlist
 def get_newest_date_in_playlist(pl_id):
-    # assume chronologically added ordered playlist
+    """    
+    ASSUMPTIONS: the order of the songs in the playlist is in which the songs were added
+    Potential Solution: loop through every track's date added and find the max (not implemented)
+    """    
     songs = sp.playlist_tracks(pl_id, fields="items, total")
     if songs['total'] == 0:
         return start_season_time(dt.now(tz=tz.utc))
