@@ -12,21 +12,17 @@ class ClientManager():
             id = ClientManager.clients[i].me()['id']
             cache_path = constant.CACHE_PATH + "/.cache-" + \
                 ClientManager.clients[i].me()['id']
-            f = open(cache_path)
-            token = json.loads(f.read())
-            f.close()
             oauth = SpotifyOAuth(
                 scope = constant.SCOPE,
                 username = id,
                 cache_path = cache_path
             )
-            token = oauth.refresh_access_token(token["refresh_token"])
+            # this might be redundant and could probably do with less disk reads
+            token = oauth.get_cached_token()['access_token']
             ClientManager.clients[i] = spotipy.Spotify(auth = token)
+
     def load_clients_from_cache(self):
         for filename in os.listdir(constant.CACHE_PATH):
-            f = open(constant.CACHE_PATH + "/" + filename)
-            token = json.loads(f.read())
-            f.close()
             id = filename[len(".cache-"):]
             cache_path = constant.CACHE_PATH + "/.cache-" + id
             oauth = SpotifyOAuth(
@@ -34,5 +30,5 @@ class ClientManager():
                 username = id,
                 cache_path = cache_path
             )
-            token = oauth.refresh_access_token(token["refresh_token"])
+            token = oauth.get_cached_token()['access_token']
             ClientManager.clients.append(spotipy.Spotify(auth = token))

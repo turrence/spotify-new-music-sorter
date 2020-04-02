@@ -13,7 +13,7 @@ class App(object):
     def __init__(self):
         self.clients = ClientManager()
         # load all clients
-        # self.clients.load_clients_from_cache()
+        self.clients.load_clients_from_cache()
 
     def update_playlists(self):
         for c in ClientManager.clients:
@@ -29,7 +29,7 @@ class App(object):
     def run_periodically(self):
         # update every 10 minutes
         threading.Timer(constant.UPDATE_FREQUENCY, self.run_periodically).start()
-        # self.clients.refresh_clients()
+        self.clients.refresh_clients()
         self.update_playlists()
         
 
