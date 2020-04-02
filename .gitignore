@@ -6,3 +6,5 @@ cache/
 /venv
 /env
 run.sh
+log.txt
+

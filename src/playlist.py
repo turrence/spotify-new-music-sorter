@@ -18,8 +18,7 @@ def get_current_season(now) -> str:
 def get_target_playlist(date, client) -> str:
     """
     ASSUMPTIONS: a user has no duplicate playlist names
-    In the case that a user has a duplicate playlist name, the script will modify
-    the one 'lower' in the user's playlist library
+    In the case that a user has a duplicate playlist name, the script will modify the one 'lower' in the user's playlist library
     Solution: no intuitive workaround
     """
     # december of 2019 looks for playlist "winter 2020"
