@@ -1,0 +1,2 @@
+class ClientManager():
+    clients = []
