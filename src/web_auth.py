@@ -17,7 +17,7 @@ def main():
         cache_path=os.getcwd() + "/cache/.cache-temp"
     )
     # ask the user for authorization here
-    if (len(request.args) == 0):
+    if ("code" not in request.args):
         return redirect(oauth.get_authorize_url())
     # we got the code here, use it to create a client
     else:
