@@ -31,6 +31,6 @@ class App(object):
 if __name__ == "__main__":
     app = App()
     app.run_periodically()
-    # run the server in a backtround thread
+    # run the server in a background thread
     server_thread = threading.Thread(target = auth_server.run, args=())
     server_thread.run()
