@@ -20,7 +20,6 @@ class App(object):
             target_playlist = playlist.get_target_playlist(dt.now(tz=tz.utc), c)
             # in utc
             last_updated = playlist.get_newest_date_in_playlist(target_playlist, c)
-            print(last_updated)
             songs_to_be_added = saved_songs.get_unadded_songs(last_updated, c)
             if len(songs_to_be_added) < 1:
                 print("no songs to be added for", c.me()['id'])
