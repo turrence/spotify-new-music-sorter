@@ -1,3 +1,4 @@
+import constant
 import playlist
 import saved_songs
 import threading
@@ -27,7 +28,8 @@ class App(object):
                 c.user_playlist_add_tracks(c.me()['id'], target_playlist, songs_to_be_added)
 
     def run_periodically(self):
-        threading.Timer(10, self.run_periodically).start()
+        # update every 10 minutes
+        threading.Timer(constant.UPDATE_FREQUENCY, self.run_periodically).start()
         # self.clients.refresh_clients()
         self.update_playlists()
         
