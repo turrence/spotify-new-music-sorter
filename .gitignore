@@ -2,5 +2,7 @@ app-env
 .vscode
 __pycache__
 cache/
-
+.cache*
 /venv
+/env
+run.sh
