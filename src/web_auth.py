@@ -1,3 +1,4 @@
+import config
 import constant
 import spotipy
 import os
@@ -13,7 +14,10 @@ def main():
     oauth = SpotifyOAuth(
         scope = constant.SCOPE, 
         username = "temp",
-        cache_path = constant.CACHE_PATH + "/.cache-temp"
+        cache_path = constant.CACHE_PATH + "/.cache-temp",
+        client_id = config.client_id,
+        client_secret = config.client_secret,
+        redirect_uri = config.redirect_uri
     )
     # ask the user for authorization here
     if ("code" not in request.args):

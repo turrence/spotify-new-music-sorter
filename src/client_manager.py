@@ -1,3 +1,4 @@
+import config
 import constant
 import json
 import os
@@ -15,7 +16,11 @@ class ClientManager():
             oauth = SpotifyOAuth(
                 scope = constant.SCOPE,
                 username = id,
-                cache_path = cache_path
+                cache_path = cache_path,
+                client_id = config.client_id,
+                client_secret = config.client_secret,
+                redirect_uri = config.redirect_uri
+                
             )
             # this might be redundant and could probably do with less disk reads
             token = oauth.get_cached_token()['access_token']
@@ -28,7 +33,10 @@ class ClientManager():
             oauth = SpotifyOAuth(
                 scope = constant.SCOPE,
                 username = id,
-                cache_path = cache_path
+                cache_path = cache_path,
+                client_id = config.client_id,
+                client_secret = config.client_secret,
+                redirect_uri = config.redirect_uri
             )
             token = oauth.get_cached_token()['access_token']
             ClientManager.clients.append(spotipy.Spotify(auth = token))
