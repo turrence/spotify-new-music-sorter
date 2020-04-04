@@ -3,6 +3,7 @@ import constant
 import playlist
 import saved_songs
 import os
+import spotipy
 import threading
 import time
 import traceback
@@ -10,8 +11,6 @@ from datetime import datetime as dt
 from datetime import timezone as tz
 from web_auth import auth_server
 from spotipy.oauth2 import SpotifyOAuth
-
-import spotipy
 
 class App(object):
     def __init__(self):

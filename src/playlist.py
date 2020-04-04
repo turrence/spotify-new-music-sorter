@@ -67,7 +67,7 @@ def start_season_time(now) -> dt:
         return dt(now.year, 9, 1, tzinfo=tz.utc)
 
 # Updates the playlist for a specific client
-# sp: the client to update
+# client: the client to update
 def update_playlist(client):
     target_playlist = get_target_playlist(dt.now(tz=tz.utc), client)
     # in utc
