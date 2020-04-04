@@ -2,9 +2,10 @@ import config
 import constant
 import playlist
 import saved_songs
+import os
 import threading
 import time
-import os
+import traceback
 from datetime import datetime as dt
 from datetime import timezone as tz
 from web_auth import auth_server
@@ -47,11 +48,18 @@ class App(object):
         # update every 10 minutes
         threading.Timer(constant.UPDATE_FREQUENCY, self.run_periodically).start()
         print("Updating playlists....")
-        self.update_clients()
+        try:
+            self.update_clients()
+        except Exception as e:
+            with open(constant.SRC_PATH + '/../error.log', 'a') as f:
+                f.write(str(e))
+                f.write(traceback.format_exc())
 
+app = App()
+app.run_periodically()
+
+# debug server
 if __name__ == "__main__":
-    app = App()
-    app.run_periodically()
     # run the server in a background thread
     server_thread = threading.Thread(target = auth_server.run, kwargs=dict(port=config.port))
-    server_thread.run() 
+    server_thread.run()

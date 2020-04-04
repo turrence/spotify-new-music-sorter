@@ -16,6 +16,6 @@ def get_unadded_songs(dt_threshold, client):
             else: 
                 return song_ids
         # edge case: user has less liked songs than the chunk size
-        if len(songs_liked['items']) > chunks:
+        if len(songs_liked['items']) < chunks:
             return song_ids
         offset += chunks
