@@ -2,14 +2,15 @@ import config
 import constant
 import playlist
 import saved_songs
+import os
 import threading
 import time
-import os
+import traceback
+import sys
 from client_manager import ClientManager
 from datetime import datetime as dt
 from datetime import timezone as tz
 from web_auth import auth_server
-
 
 class App(object):
     def __init__(self):
@@ -25,16 +26,20 @@ class App(object):
             # in utc
             last_updated = playlist.get_newest_date_in_playlist(target_playlist, c)
             songs_to_be_added = saved_songs.get_unadded_songs(last_updated, c)
-            if len(songs_to_be_added) < 1:
-                print("no songs to be added for", c.me()['id'])
-            else:
+            if len(songs_to_be_added) >= 1:
                 c.user_playlist_add_tracks(c.me()['id'], target_playlist, songs_to_be_added)
 
     def run_periodically(self):
         # update every 10 minutes
         threading.Timer(constant.UPDATE_FREQUENCY, self.run_periodically).start()
-        self.clients.refresh_clients()
-        self.update_playlists()
-        
+        try:
+            self.clients.refresh_clients()
+            self.update_playlists()
+        except Exception:
+            traceback.print_exc()
+
+# workaround for gunicorn logging
+sys.stdout = sys.stderr
+
 app = App()
 app.run_periodically()
