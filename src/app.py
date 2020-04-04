@@ -6,7 +6,6 @@ import os
 import threading
 import time
 import traceback
-import sys
 from client_manager import ClientManager
 from datetime import datetime as dt
 from datetime import timezone as tz
@@ -35,11 +34,10 @@ class App(object):
         try:
             self.clients.refresh_clients()
             self.update_playlists()
-        except Exception:
-            traceback.print_exc()
-
-# workaround for gunicorn logging
-sys.stdout = sys.stderr
+        except Exception as e:
+            with open('error.txt', 'a') as f:
+                f.write(str(e))
+                f.write(traceback.format_exc())
 
 app = App()
 app.run_periodically()
