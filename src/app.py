@@ -36,10 +36,5 @@ class App(object):
         self.clients.refresh_clients()
         self.update_playlists()
         
-
-if __name__ == "__main__":
-    app = App()
-    app.run_periodically()
-    # run the server in a background thread
-    server_thread = threading.Thread(target = auth_server.run, kwargs=dict(port=config.port))
-    server_thread.run()
+app = App()
+app.run_periodically()
