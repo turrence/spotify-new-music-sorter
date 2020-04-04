@@ -35,7 +35,7 @@ class App(object):
             self.clients.refresh_clients()
             self.update_playlists()
         except Exception as e:
-            with open('error.txt', 'a') as f:
+            with open(constant.SRC_PATH + '/../error.log', 'a') as f:
                 f.write(str(e))
                 f.write(traceback.format_exc())
 
