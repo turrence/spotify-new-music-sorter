@@ -35,9 +35,11 @@ class App(object):
             token = oauth.get_cached_token()['access_token']
             playlist.update_playlist(spotipy.Spotify(auth=token))
 
-    def run_periodically(self):
-        # update every 10 minutes
-        threading.Timer(constant.UPDATE_FREQUENCY, self.run_periodically).start()
+    # Runs every n seconds on a separate thread
+    # update_frequency: how frequently to update in seconds
+    def run(self, update_frequency):
+        threading.Timer(update_frequency, self.run, kwargs=dict(
+            update_frequency=update_frequency)).start()
         print("Updating playlists....")
         try:
             self.update_clients()
@@ -47,7 +49,8 @@ class App(object):
                 f.write(traceback.format_exc())
 
 app = App()
-app.run_periodically()
+# update faster if we're using the debug environment
+app.run(10 if __name__ == "__main__" else constant.UPDATE_FREQUENCY)
 
 # debug server
 if __name__ == "__main__":
