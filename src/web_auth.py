@@ -32,3 +32,7 @@ def auth_page():
                   constant.CACHE_PATH + "/.cache-" + client.me()['id'])
         ClientManager.clients.append(client)
         return "Successfully authenticated, you may close this now"
+
+@auth_server.route('/logout')
+def logout_page():
+    return
