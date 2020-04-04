@@ -3,7 +3,7 @@ import constant
 import spotipy
 import os
 from spotipy.oauth2 import SpotifyOAuth
-from flask import Flask, redirect, request
+from flask import Flask, redirect, request, render_template
 
 auth_server = Flask(__name__)
 auth_server.debug = False

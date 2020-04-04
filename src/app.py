@@ -16,8 +16,6 @@ class App(object):
     def __init__(self):
         if not os.path.exists(constant.CACHE_PATH):
             os.mkdir(constant.CACHE_PATH)
-        # load all clients: this only runs when we shut down the app and reboot it
-        # alternative: solution when the app boots up, run the program
         self.update_clients()
     
     def update_clients(self):
