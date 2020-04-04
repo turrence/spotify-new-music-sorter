@@ -10,7 +10,7 @@ auth_server = Flask(__name__)
 auth_server.debug = False
 
 @auth_server.route('/')
-def main():
+def auth_page():
     oauth = SpotifyOAuth(
         scope = constant.SCOPE, 
         username = "temp",
@@ -31,5 +31,4 @@ def main():
         os.rename(constant.CACHE_PATH + "/.cache-temp",
                   constant.CACHE_PATH + "/.cache-" + client.me()['id'])
         ClientManager.clients.append(client)
-        print("Authenticated: " + ClientManager.clients[-1].me()['id'])
         return "Successfully authenticated, you may close this now"
