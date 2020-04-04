@@ -22,6 +22,9 @@ def auth_page():
     if ("code" not in request.args):
         return redirect(oauth.get_authorize_url())
     else:
+        """
+        backend logic probably doesn't belong here
+        """
         # we got the code here, use it to create a token
         print("Response Code: " + request.args["code"])
         token = oauth.get_access_token(request.args["code"], as_dict=False)

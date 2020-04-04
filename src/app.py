@@ -5,7 +5,6 @@ import saved_songs
 import threading
 import time
 import os
-from client_manager import ClientManager
 from datetime import datetime as dt
 from datetime import timezone as tz
 from web_auth import auth_server
@@ -17,7 +16,6 @@ class App(object):
     def __init__(self):
         if not os.path.exists(constant.CACHE_PATH):
             os.mkdir(constant.CACHE_PATH)
-        self.clients = ClientManager()
         # load all clients: this only runs when we shut down the app and reboot it
         # alternative: solution when the app boots up, run the program
         self.update_clients()
