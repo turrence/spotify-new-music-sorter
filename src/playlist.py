@@ -76,5 +76,5 @@ def update_playlist(client):
     if len(songs_to_be_added) < 1:
         print("No songs to be added for", client.me()['id'])
     else:
-        print("Adding " + songs_to_be_added + " songs for", client.me()['id'])
+        print("Adding " + str(len(songs_to_be_added)) + " songs for", client.me()['id'])
         client.user_playlist_add_tracks(client.me()['id'], target_playlist, songs_to_be_added)
