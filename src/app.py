@@ -1,3 +1,4 @@
+import config
 import constant
 import playlist
 import saved_songs
@@ -40,5 +41,5 @@ if __name__ == "__main__":
     app = App()
     app.run_periodically()
     # run the server in a background thread
-    server_thread = threading.Thread(target = auth_server.run, args=())
+    server_thread = threading.Thread(target = auth_server.run, kwargs=dict(port=config.port))
     server_thread.run()

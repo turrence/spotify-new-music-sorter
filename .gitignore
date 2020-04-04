@@ -6,3 +6,4 @@ cache/
 /venv
 /env
 run.sh
+config.ini
