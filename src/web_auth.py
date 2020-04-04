@@ -3,8 +3,7 @@ import constant
 import spotipy
 import os
 from spotipy.oauth2 import SpotifyOAuth
-from flask import Flask, redirect, request
-from client_manager import ClientManager
+from flask import Flask, redirect, request, render_template
 
 auth_server = Flask(__name__)
 auth_server.debug = False
@@ -23,6 +22,9 @@ def auth_page():
     if ("code" not in request.args):
         return redirect(oauth.get_authorize_url())
     else:
+        """
+        backend logic probably doesn't belong here
+        """
         # we got the code here, use it to create a token
         print("Response Code: " + request.args["code"])
         token = oauth.get_access_token(request.args["code"], as_dict=False)
@@ -30,5 +32,8 @@ def auth_page():
         client = spotipy.Spotify(auth=token)
         os.rename(constant.CACHE_PATH + "/.cache-temp",
                   constant.CACHE_PATH + "/.cache-" + client.me()['id'])
-        ClientManager.clients.append(client)
         return "Successfully authenticated, you may close this now"
+
+@auth_server.route('/logout')
+def logout_page():
+    return
