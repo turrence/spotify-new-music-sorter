@@ -4,7 +4,6 @@ import spotipy
 import os
 from spotipy.oauth2 import SpotifyOAuth
 from flask import Flask, redirect, request
-from client_manager import ClientManager
 
 auth_server = Flask(__name__)
 auth_server.debug = False
@@ -30,7 +29,6 @@ def auth_page():
         client = spotipy.Spotify(auth=token)
         os.rename(constant.CACHE_PATH + "/.cache-temp",
                   constant.CACHE_PATH + "/.cache-" + client.me()['id'])
-        ClientManager.clients.append(client)
         return "Successfully authenticated, you may close this now"
 
 @auth_server.route('/logout')
