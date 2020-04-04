@@ -7,5 +7,5 @@ cache/
 /env
 run.sh
 log.txt
-
+*.pyc
 config.ini
