@@ -1,4 +1,7 @@
 # spotify-new-music-sorter
-Any songs that are "liked" on your Spotify will be auto added to a playlist
 
-[here](http://spotifyplaylists.duckdns.org/)
+Adds liked songs to a playlist separated by seasons.
+
+![image](https://imgur.com/VcqYVTa.png)
+
+[Try it here](http://spotifyplaylists.duckdns.org/)
