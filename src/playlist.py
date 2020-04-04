@@ -68,7 +68,7 @@ def start_season_time(now) -> dt:
 
 # Updates the playlist for a specific client
 # sp: the client to update
-def update_playlist(self, client):
+def update_playlist(client):
     target_playlist = get_target_playlist(dt.now(tz=tz.utc), client)
     # in utc
     last_updated = get_newest_date_in_playlist(target_playlist, client)
