@@ -53,11 +53,14 @@ def logout_page():
     if ("code" not in request.args):
         return redirect(oauth.get_authorize_url())
     else:
+        logout_page = render_template("logout_sucess.html")
         print("Response Code: " + request.args["code"])
-        token = oauth.get_access_token(request.args["code"], as_dict=False)
+        try:
+            token = oauth.get_access_token(request.args["code"], as_dict=False)
+        except SpotifyOauthError:
+            return render_template("logout_fail.html")
         # which we use to create a client
         client = spotipy.Spotify(auth=token)
-        logout_page = render_template("logout.html")
         # this is apparently the pythonic way to do this
         try:
             os.remove(constant.CACHE_PATH + "/.cache-" + client.me()['id'])
