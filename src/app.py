@@ -33,7 +33,15 @@ class App(object):
                 redirect_uri = config.redirect_uri
             )
             token = oauth.get_cached_token()['access_token']
-            playlist.update_playlist(spotipy.Spotify(auth=token))
+            try:
+                playlist.update_playlist(spotipy.Spotify(auth=token))
+            except Exception as e:
+                message = "Unable to update playlist for: " + id + "\n"
+                message += str(e)
+                print(message)
+                with open(constant.SRC_PATH + '/../error.log', 'a') as f:
+                    f.write(message)
+                    f.write(traceback.format_exc())
 
     # Runs every n seconds on a separate thread
     # update_frequency: how frequently to update in seconds
