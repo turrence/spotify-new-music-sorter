@@ -32,7 +32,7 @@ def auth_page():
         client = spotipy.Spotify(auth=token)
         os.rename(constant.CACHE_PATH + "/.cache-temp",
                   constant.CACHE_PATH + "/.cache-" + client.me()['id'])
-        return "Successfully authenticated, you may close this now"
+        return render_template("auth_success.html")
 
 @auth_server.route('/logout')
 def logout_page():
