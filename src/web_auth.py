@@ -2,7 +2,7 @@ import config
 import constant
 import spotipy
 import os
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyOAuth, SpotifyOauthError
 from flask import Flask, redirect, request, render_template
 
 auth_server = Flask(__name__)
@@ -27,7 +27,10 @@ def auth_page():
         """
         # we got the code here, use it to create a token
         print("Response Code: " + request.args["code"])
-        token = oauth.get_access_token(request.args["code"], as_dict=False)
+        try:
+            token = oauth.get_access_token(request.args["code"], as_dict=False)
+        except SpotifyOauthError:
+            return render_template("auth_fail.html", url=config.redirect_uri)
         # which we use to create a client
         client = spotipy.Spotify(auth=token)
         os.rename(constant.CACHE_PATH + "/.cache-temp",
