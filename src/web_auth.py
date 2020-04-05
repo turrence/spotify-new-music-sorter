@@ -36,4 +36,34 @@ def auth_page():
 
 @auth_server.route('/logout')
 def logout_page():
-    return
+    oauth = SpotifyOAuth(
+        scope=constant.SCOPE,
+        username="temp",
+        cache_path=constant.CACHE_PATH + "/.cache-temp",
+        client_id=config.client_id,
+        client_secret=config.client_secret,
+        redirect_uri=config.redirect_uri + "/logout"
+    )
+    # get another authorization code so we know who we're logging out
+    if ("code" not in request.args):
+        return redirect(oauth.get_authorize_url())
+    else:
+        print("Response Code: " + request.args["code"])
+        token = oauth.get_access_token(request.args["code"], as_dict=False)
+        # which we use to create a client
+        client = spotipy.Spotify(auth=token)
+        logout_page = render_template("logout.html")
+        # this is apparently the pythonic way to do this
+        try:
+            os.remove(constant.CACHE_PATH + "/.cache-" + client.me()['id'])
+        except OSError:
+            logout_page = render_template("logout_fail.html", id=client.me()['id'])
+        try:
+            os.remove(oauth.cache_path)
+        except OSError:
+            pass
+        return logout_page
+
+@auth_server.route('/check_status')
+def status_check():
+    return "work in progress, come back later!"
