@@ -1,8 +1,8 @@
 from configparser import ConfigParser
-from constant import CACHE_PATH
+from constant import SRC_PATH
 from os import path
 
-config_path = CACHE_PATH + "/../config.ini"
+config_path = SRC_PATH + "/../config.ini"
 
 config = ConfigParser()
 if not path.exists(config_path):

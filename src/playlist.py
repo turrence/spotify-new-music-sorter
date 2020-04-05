@@ -2,6 +2,7 @@ from datetime import datetime as dt
 from datetime import timezone as tz
 
 import constant
+from saved_songs import get_unadded_songs
 
 # returns the season given a time
 def get_current_season(now) -> str:
@@ -64,3 +65,16 @@ def start_season_time(now) -> dt:
         return dt(now.year, 6, 1, tzinfo=tz.utc)
     else:
         return dt(now.year, 9, 1, tzinfo=tz.utc)
+
+# Updates the playlist for a specific client
+# client: the client to update
+def update_playlist(client):
+    target_playlist = get_target_playlist(dt.now(tz=tz.utc), client)
+    # in utc
+    last_updated = get_newest_date_in_playlist(target_playlist, client)
+    songs_to_be_added = get_unadded_songs(last_updated, client)
+    if len(songs_to_be_added) < 1:
+        print("No songs to be added for", client.me()['id'])
+    else:
+        print("Adding " + str(len(songs_to_be_added)) + " songs for", client.me()['id'])
+        client.user_playlist_add_tracks(client.me()['id'], target_playlist, songs_to_be_added)
