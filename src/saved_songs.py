@@ -1,12 +1,13 @@
+from collections import deque
 from datetime import timezone as tz
 from datetime import datetime as dt
 
 # returns a list of song ids
-def get_unadded_songs(dt_threshold, client):
+def get_unadded_songs(dt_threshold, client) -> deque:
     """
     finds all songs that were added past the last date
     """
-    song_ids = []
+    song_ids = deque()
     chunks, offset = 20, 0
     while True:
         songs_liked = client.current_user_saved_tracks(chunks, offset)
