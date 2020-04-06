@@ -51,7 +51,7 @@ def get_newest_date_in_playlist(pl_id, client):
     songs = client.playlist_tracks(pl_id, fields="items, total")
     if songs['total'] == 0:
         return start_season_time(dt.now(tz=tz.utc))
-    return dt.strptime(songs['items'][songs['total'] - 1]['added_at'], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=tz.utc) 
+    return dt.strptime(songs['items'][len(songs['items']) - 1]['added_at'], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=tz.utc)
 
 # given a datetime, return a dt of the start of the season
 # for e.g. if its winter 2020, return DEC 1, 2019 00:00 UTC
