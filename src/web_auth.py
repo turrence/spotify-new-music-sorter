@@ -10,6 +10,10 @@ auth_server = Flask(__name__)
 auth_server.debug = False
 
 @auth_server.route('/')
+def frontpage():
+    return render_template("index.html", url=config.redirect_uri)
+
+@auth_server.route('/login')
 def auth_page():
     oauth = SpotifyOAuth(
         scope = constant.SCOPE, 
@@ -17,7 +21,7 @@ def auth_page():
         cache_path = constant.CACHE_PATH + "/.cache-temp",
         client_id = config.client_id,
         client_secret = config.client_secret,
-        redirect_uri = config.redirect_uri
+        redirect_uri = config.redirect_uri + "/login"
     )
     # ask the user for authorization here
     if ("code" not in request.args):
