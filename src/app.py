@@ -35,9 +35,10 @@ class App(object):
             try:
                 playlist.update_playlist(spotipy.Spotify(auth=token))
             except Exception as e:
+                timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
                 message = "Unable to update playlist for: " + id + "\n"
                 message += str(e)
-                print(message)
+                print(timestamp + ": " + message)
                 with open(constant.SRC_PATH + '/../error.log', 'a') as f:
                     f.write(message)
                     f.write(traceback.format_exc())
@@ -47,7 +48,8 @@ class App(object):
     def run(self, update_frequency):
         threading.Timer(update_frequency, self.run, kwargs=dict(
             update_frequency=update_frequency)).start()
-        print("Updating playlists....")
+        timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
+        print(timestamp + ": Updating playlists....")
         try:
             self.update_clients()
         except Exception as e:
