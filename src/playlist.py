@@ -36,7 +36,7 @@ def get_target_playlist(date, client) -> str:
 
     if target_playlist_name not in all_playlists:
         resp = client.user_playlist_create(client.me()['id'], target_playlist_name, public=False, 
-            description='AUTOMATED PLAYLIST - https://github.com/turrence/spotify-new-music-sorter')
+            description='AUTOMATED PLAYLIST ---------------------------------https://github.com/turrence/spotify-new-music-sorter')
         return resp['id']
     else:
         return all_playlists[target_playlist_name]
