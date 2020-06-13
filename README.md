@@ -1,6 +1,6 @@
 # spotify-new-music-sorter
 
-Adds liked songs to a playlist separated by seasons.
+Groups liked songs on Spotify into seasonal playlists
 
 ![image](https://imgur.com/VcqYVTa.png)
 
