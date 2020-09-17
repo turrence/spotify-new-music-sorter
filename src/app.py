@@ -4,19 +4,18 @@ import playlist
 import saved_songs
 import os
 import spotipy
+import sys
 import threading
 import time
 import traceback
 from datetime import datetime as dt
 from datetime import timezone as tz
-from web_auth import auth_server
 from spotipy.oauth2 import SpotifyOAuth
 
 class App(object):
     def __init__(self):
         if not os.path.exists(constant.CACHE_PATH):
             os.mkdir(constant.CACHE_PATH)
-        self.update_clients()
     
     # Refreshes the access tokens and updates the playlists for all clients in 
     # the cache
@@ -36,9 +35,10 @@ class App(object):
             try:
                 playlist.update_playlist(spotipy.Spotify(auth=token))
             except Exception as e:
+                timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
                 message = "Unable to update playlist for: " + id + "\n"
                 message += str(e)
-                print(message)
+                print(timestamp + ": " + message)
                 with open(constant.SRC_PATH + '/../error.log', 'a') as f:
                     f.write(message)
                     f.write(traceback.format_exc())
@@ -48,7 +48,8 @@ class App(object):
     def run(self, update_frequency):
         threading.Timer(update_frequency, self.run, kwargs=dict(
             update_frequency=update_frequency)).start()
-        print("Updating playlists....")
+        timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
+        print(timestamp + ": Updating playlists....")
         try:
             self.update_clients()
         except Exception as e:
@@ -56,12 +57,19 @@ class App(object):
                 f.write(str(e))
                 f.write(traceback.format_exc())
 
-app = App()
-# update faster if we're using the debug environment
-app.run(10 if __name__ == "__main__" else constant.UPDATE_FREQUENCY)
 
-# debug server
 if __name__ == "__main__":
-    # run the server in a background thread
-    server_thread = threading.Thread(target = auth_server.run, kwargs=dict(port=config.port))
-    server_thread.run()
+    debug = False
+    if len(sys.argv) >= 2:
+        if sys.argv[1] == "--debug":
+            debug = True
+    app = App()
+    # update faster if we're using the debug environment
+    app.run(10 if debug else constant.UPDATE_FREQUENCY)
+
+    # debug server
+    if debug:
+        from web_auth import auth_server
+        # run the server in a background thread
+        server_thread = threading.Thread(target = auth_server.run, kwargs=dict(port=config.port))
+        server_thread.run()

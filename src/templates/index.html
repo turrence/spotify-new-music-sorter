@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+            integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+        <title>Spotify Playlist Sorter</title>
+        <style>
+            .step {
+                margin: 1%;
+            }
+            #jumbotron {
+                padding: 3%;
+                padding-bottom: 2%;
+                margin-bottom: -15px;
+            }
+            #content {
+                padding: 2%;
+                text-align: center;
+                height: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <section class="jumbotron text-center" id="jumbotron">
+            <div class="container">
+                <h1>Spotify Seasonal Playlist Creator</h1>
+                <p class="lead text-muted">
+                    We'll place your liked songs into seasonally organized playlists so you don't have to
+                </p>
+                <img class="img-fluid" src="https://i.imgur.com/IOoSMmL.png" alt="preview">
+                <p>
+                    <a href="{{ url }}/login" class="btn btn-primary my-2">Try it here</a>
+                    <a href="https://github.com/turrence/spotify-new-music-sorter" class="btn btn-secondary my-2">View the source</a>
+                </p>
+            </div>
+        </section>
+        <section id="content" class="mx-auto bg-light">
+            <h1>How it works</h1>
+            <div class="d-flex flex-column d-sm-flex flex-sm-row justify-content-center">
+                <div class="p-2 bd-highlight step">
+                    <h3>Step 1: Link your Spotify account</h3>
+                    <p class="text-muted">
+                        Use the link above to give us the appropriate permissions
+                    </p>
+                    <img src="https://i.imgur.com/xsTQuJW.png" alt="step 1">
+                </div>
+                <div class="p-2 bd-highlight step">
+                    <h3>Step 2: Like some songs</h3>
+                    <p class="text-muted">
+                        Every 10 minutes, we'll update your playlist with the songs
+                        you've liked
+                    </p>
+                    <img src="https://i.imgur.com/Eyjr230.png" alt="step 1">
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
