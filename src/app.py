@@ -55,7 +55,7 @@ class App(object):
                 # token, they probably revoked our access
                 if database.get_field(id, "error_count") > constant.ERROR_THRESHOLD:
                     try:
-                        os.remove(filename)
+                        os.remove(cache_path)
                     except OSError:
                         pass
                     database.remove_user(id)
