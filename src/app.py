@@ -38,12 +38,12 @@ class App(object):
                 playlist.update_playlist(spotipy.Spotify(auth=token))
             except Exception as e:
                 timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
-                message = "Unable to update playlist for: " + id + "\n"
+                # message = "Unable to update playlist for: " + id + "\n"
                 # message += str(e)
                 # message = timestamp + ": " + message
                 # print(message)
                 database.increment_field(id, "error_count")
-                database.update_user(id, "last_error", message)
+                database.update_user(id, "last_error", str(e))
                 # with open(constant.SRC_PATH + '/../error.log', 'a') as f:
                 #     f.write(message)
                 #     f.write(traceback.format_exc())
