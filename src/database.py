@@ -8,10 +8,15 @@ from constant import CACHE_PATH, DATABASE_NAME
 def get_user(id):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
-    cursor.execute(f'SELECT * FROM Users WHERE id="{id}"')
+    sql = f'SELECT * FROM Users WHERE id="{id}"'
+    cursor.execute(sql)
+    row = cursor.fetchone()
     conn.commit()
     conn.close()
-    return cursor.fetchone()
+    if row:
+        return row[0]
+    else:
+        return None
 
 def update_user(id, field, value):
     conn = sqlite3.connect(DATABASE_NAME)
@@ -19,16 +24,18 @@ def update_user(id, field, value):
     
     # really scuffed, dynamic type abuse
     if type(value) == str:
-        cursor.execute(f'UPDATE Users SET {field}="{value}" WHERE id="{id}"')
+        sql = f'UPDATE Users SET {field}="{value}" WHERE id="{id}"'
     else:
-        cursor.execute(f'UPDATE Users SET {field}={value} WHERE id="{id}"')
+        sql = f'UPDATE Users SET {field}={value} WHERE id="{id}"'
+    cursor.execute(sql)
     conn.commit()
     conn.close()
 
 def get_field(id, field):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
-    cursor.execute(f'SELECT {field} FROM Users WHERE id = "{id}"')
+    sql = f'SELECT {field} FROM Users WHERE id = "{id}"'
+    cursor.execute(sql)
     entry = cursor.fetchone()[0]
     update_user(id, field, entry + 1)
     conn.close()
@@ -41,14 +48,16 @@ def increment_field(id, field):
 def add_user(id):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
-    conn.execute(f'INSERT INTO Users(id) VALUES("{id}")')
+    sql = f'INSERT INTO Users(id) VALUES("{id}")'
+    conn.execute(sql)
     conn.commit()
     conn.close()
 
 def remove_user(id):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
-    conn.execute(f'DELETE FROM Users WHERE id = "{id}"')
+    sql = f'DELETE FROM Users WHERE id = "{id}"'
+    conn.execute(sql)
     conn.commit()
     conn.close()
 
