@@ -50,11 +50,11 @@ def add_user(id):
     cursor = conn.cursor()
     # reset user if they reregister
     if get_user(id) != None:
-        remove_user(id)
-
-    sql = f'INSERT INTO Users(id) VALUES("{id}")'
-    conn.execute(sql)
-    conn.commit()
+        update_user(id, "error_count", 0)
+    else:
+        sql = f'INSERT INTO Users(id) VALUES(?)'
+        conn.execute(sql, (id))
+        conn.commit()
     conn.close()
 
 def remove_user(id):
