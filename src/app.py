@@ -47,6 +47,17 @@ class App(object):
                 # with open(constant.SRC_PATH + '/../error.log', 'a') as f:
                 #     f.write(message)
                 #     f.write(traceback.format_exc())
+
+                # if a user passes a certain number of errors, delete their 
+                # token, they probably revoked our access
+                if database.get_field(id, "error_count") > constant.ERROR_THRESHOLD:
+                    try:
+                        os.remove(filename)
+                    except OSError:
+                        pass
+                    database.remove_user(id)
+
+
     # Runs every n seconds on a separate thread
     # update_frequency: how frequently to update in seconds
     def run(self, update_frequency):
