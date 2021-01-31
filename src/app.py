@@ -47,7 +47,6 @@ class App(object):
                 # with open(constant.SRC_PATH + '/../error.log', 'a') as f:
                 #     f.write(message)
                 #     f.write(traceback.format_exc())
-
     # Runs every n seconds on a separate thread
     # update_frequency: how frequently to update in seconds
     def run(self, update_frequency):

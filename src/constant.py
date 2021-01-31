@@ -10,3 +10,4 @@ CACHE_PATH = SRC_PATH + "/../cache"
 SCOPE = "user-library-read playlist-read-private playlist-modify-private playlist-modify-public"
 UPDATE_FREQUENCY = 600 # in seconds
 DATABASE_NAME = "database.db"
+ERROR_THRESHOLD = 30
