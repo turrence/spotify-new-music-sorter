@@ -36,6 +36,9 @@ class App(object):
             try:
                 token = oauth.get_cached_token()['access_token']
                 playlist.update_playlist(spotipy.Spotify(auth=token))
+
+                # reset the users error count if an update was successful
+                database.update_user(id, "error_count", 0)
             except Exception as e:
                 timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
                 # message = "Unable to update playlist for: " + id + "\n"

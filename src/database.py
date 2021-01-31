@@ -16,7 +16,12 @@ def get_user(id):
 def update_user(id, field, value):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
-    cursor.execute(f'UPDATE Users SET {field}="{value}" WHERE id="{id}"')
+    
+    # really scuffed, dynamic type abuse
+    if type(value) == str:
+        cursor.execute(f'UPDATE Users SET {field}="{value}" WHERE id="{id}"')
+    else:
+        cursor.execute(f'UPDATE Users SET {field}={value} WHERE id="{id}"')
     conn.commit()
     conn.close()
 
