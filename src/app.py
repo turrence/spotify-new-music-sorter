@@ -43,7 +43,7 @@ class App(object):
                 message = timestamp + ": " + message
                 # print(message)
                 database.increment_field(id, "error_count")
-                database.update_user(id, "last_error", str(e))
+                database.update_user(id, "last_error", message)
                 # with open(constant.SRC_PATH + '/../error.log', 'a') as f:
                 #     f.write(message)
                 #     f.write(traceback.format_exc())
