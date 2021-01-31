@@ -10,3 +10,4 @@ log.txt
 *.pyc
 config.ini
 *.log
+*.db

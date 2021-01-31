@@ -1,5 +1,6 @@
 import config
 import constant
+import database
 import spotipy
 import os
 from spotipy.oauth2 import SpotifyOAuth, SpotifyOauthError
@@ -51,8 +52,13 @@ def auth_page():
         # create a new playlist for new users
         if not os.path.exists(client_cache):
             update_playlist(client)
+        
         # rename cache file to user
         os.rename(oauth.cache_path, client_cache)
+        
+        # add user to database
+        database.add_user(client.me()['id'])
+
         return render_template("auth_success.html")
 
 @auth_server.route('/logout')

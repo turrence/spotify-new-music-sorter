@@ -1,5 +1,6 @@
 import config
 import constant
+import database
 import playlist
 import saved_songs
 import os
@@ -16,8 +17,9 @@ class App(object):
     def __init__(self):
         if not os.path.exists(constant.CACHE_PATH):
             os.mkdir(constant.CACHE_PATH)
-    
-    # Refreshes the access tokens and updates the playlists for all clients in 
+        database.init_database()
+
+    # Refreshes the access tokens and updates the playlists for all clients in
     # the cache
     def update_clients(self):
         for filename in os.listdir(constant.CACHE_PATH):
@@ -31,17 +33,20 @@ class App(object):
                 client_secret = config.client_secret,
                 redirect_uri = config.redirect_uri
             )
-            token = oauth.get_cached_token()['access_token']
             try:
+                token = oauth.get_cached_token()['access_token']
                 playlist.update_playlist(spotipy.Spotify(auth=token))
             except Exception as e:
                 timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
                 message = "Unable to update playlist for: " + id + "\n"
-                message += str(e)
-                print(timestamp + ": " + message)
-                with open(constant.SRC_PATH + '/../error.log', 'a') as f:
-                    f.write(message)
-                    f.write(traceback.format_exc())
+                # message += str(e)
+                # message = timestamp + ": " + message
+                # print(message)
+                database.increment_field(id, "error_count")
+                database.update_user(id, "last_error", message)
+                # with open(constant.SRC_PATH + '/../error.log', 'a') as f:
+                #     f.write(message)
+                #     f.write(traceback.format_exc())
 
     # Runs every n seconds on a separate thread
     # update_frequency: how frequently to update in seconds
@@ -49,7 +54,7 @@ class App(object):
         threading.Timer(update_frequency, self.run, kwargs=dict(
             update_frequency=update_frequency)).start()
         timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
-        print(timestamp + ": Updating playlists....")
+        # print(timestamp + ": Updating playlists....")
         try:
             self.update_clients()
         except Exception as e:
