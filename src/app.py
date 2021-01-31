@@ -39,8 +39,8 @@ class App(object):
             except Exception as e:
                 timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
                 # message = "Unable to update playlist for: " + id + "\n"
-                # message += str(e)
-                # message = timestamp + ": " + message
+                message = str(e)
+                message = timestamp + ": " + message
                 # print(message)
                 database.increment_field(id, "error_count")
                 database.update_user(id, "last_error", str(e))
