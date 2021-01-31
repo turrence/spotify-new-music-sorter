@@ -58,7 +58,6 @@ class App(object):
                         os.remove(cache_path)
                     except OSError:
                         pass
-                    database.remove_user(id)
 
 
     # Runs every n seconds on a separate thread

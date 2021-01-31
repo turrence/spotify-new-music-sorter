@@ -48,6 +48,10 @@ def increment_field(id, field):
 def add_user(id):
     conn = sqlite3.connect(DATABASE_NAME)
     cursor = conn.cursor()
+    # reset user if they reregister
+    if get_user(id) != None:
+        remove_user(id)
+
     sql = f'INSERT INTO Users(id) VALUES("{id}")'
     conn.execute(sql)
     conn.commit()
