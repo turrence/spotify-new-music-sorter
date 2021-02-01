@@ -9,3 +9,5 @@ run.sh
 log.txt
 *.pyc
 config.ini
+*.log
+*.db

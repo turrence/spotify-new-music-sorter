@@ -1,5 +1,6 @@
 import config
 import constant
+import database
 import spotipy
 import os
 from spotipy.oauth2 import SpotifyOAuth, SpotifyOauthError
@@ -25,6 +26,11 @@ def auth_page():
     )
     # ask the user for authorization here
     if ("code" not in request.args):
+        # remove the temp file in case auth was not successful
+        try:
+            os.remove(oauth.cache_path)
+        except OSError:
+            pass
         return redirect(oauth.get_authorize_url())
     else:
         # TODO: backend logic probably doesn't belong here
@@ -33,14 +39,26 @@ def auth_page():
         try:
             token = oauth.get_access_token(request.args["code"], as_dict=False)
         except SpotifyOauthError:
+            # remove the temp file in case auth was not successful
+            try:
+                os.remove(oauth.cache_path)
+            except OSError:
+                pass
             return render_template("auth_fail.html", url=config.redirect_uri)
         # which we use to create a client
         client = spotipy.Spotify(auth=token)
         client_cache = constant.CACHE_PATH + "/.cache-" + client.me()['id']
+        
         # create a new playlist for new users
         if not os.path.exists(client_cache):
             update_playlist(client)
+        
+        # rename cache file to user
         os.rename(oauth.cache_path, client_cache)
+        
+        # add user to database
+        database.add_user(client.me()['id'])
+
         return render_template("auth_success.html")
 
 @auth_server.route('/logout')

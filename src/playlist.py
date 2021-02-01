@@ -1,4 +1,5 @@
 import constant
+import database
 from collections import deque
 from datetime import datetime as dt
 from datetime import timezone as tz
@@ -75,12 +76,17 @@ def update_playlist(client):
     # in utc
     last_updated = get_newest_date_in_playlist(target_playlist, client)
     songs_to_be_added = get_unadded_songs(last_updated, client)
+
+    database.update_user(client.me()['id'], "last_playlist", target_playlist)
     if len(songs_to_be_added) < 1:
         # print("No songs to be added for", client.me()['id'])
         pass
     else:
         timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
-        print(timestamp + ": Adding " + str(len(songs_to_be_added)) + " songs for", client.me()['id'])
+        # print(timestamp + ": Adding " + str(len(songs_to_be_added)) + " songs for", client.me()['id'])
+        database.update_user(client.me()['id'], "last_update", timestamp)
+        database.increment_field(client.me()['id'], "update_count")
+
         # we can only add 100 songs at a time, place all the songs in a queue
         # and dequeue into a chunk 100 songs at a time
         chunk = []

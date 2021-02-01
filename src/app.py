@@ -1,29 +1,28 @@
 import config
 import constant
+import database as db
 import playlist
-import saved_songs
 import os
 import spotipy
 import sys
 import threading
-import time
 import traceback
 from datetime import datetime as dt
 from datetime import timezone as tz
-from spotipy.oauth2 import SpotifyOAuth
 
 class App(object):
     def __init__(self):
         if not os.path.exists(constant.CACHE_PATH):
             os.mkdir(constant.CACHE_PATH)
-    
-    # Refreshes the access tokens and updates the playlists for all clients in 
+        db.init_database()
+
+    # Refreshes the access tokens and updates the playlists for all clients in
     # the cache
     def update_clients(self):
         for filename in os.listdir(constant.CACHE_PATH):
             id = filename[len(".cache-"):]
             cache_path = constant.CACHE_PATH + "/.cache-" + id
-            oauth = SpotifyOAuth(
+            oauth = spotipy.oauth2.SpotifyOAuth(
                 scope = constant.SCOPE,
                 username = id,
                 cache_path = cache_path,
@@ -31,25 +30,33 @@ class App(object):
                 client_secret = config.client_secret,
                 redirect_uri = config.redirect_uri
             )
-            token = oauth.get_cached_token()['access_token']
             try:
+                token = oauth.get_cached_token()['access_token']
                 playlist.update_playlist(spotipy.Spotify(auth=token))
+
+                # reset the users error count if an update was successful
+                db.update_user(id, "error_count", 0)
             except Exception as e:
                 timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
-                message = "Unable to update playlist for: " + id + "\n"
-                message += str(e)
-                print(timestamp + ": " + message)
-                with open(constant.SRC_PATH + '/../error.log', 'a') as f:
-                    f.write(message)
-                    f.write(traceback.format_exc())
+                message = str(e)
+                message = timestamp + ": " + message
+                db.increment_field(id, "error_count")
+                db.update_user(id, "last_error", message)
+
+                # if a user passes a certain error threshold, delete their 
+                # token, they probably revoked our access
+                if db.get_field(id, "error_count") > constant.ERROR_THRESHOLD:
+                    try:
+                        os.remove(cache_path)
+                    except OSError:
+                        pass
+
 
     # Runs every n seconds on a separate thread
     # update_frequency: how frequently to update in seconds
     def run(self, update_frequency):
         threading.Timer(update_frequency, self.run, kwargs=dict(
             update_frequency=update_frequency)).start()
-        timestamp = dt.now(tz=tz.utc).strftime('%Y-%m-%d %H:%M:%S')
-        print(timestamp + ": Updating playlists....")
         try:
             self.update_clients()
         except Exception as e:
@@ -71,5 +78,8 @@ if __name__ == "__main__":
     if debug:
         from web_auth import auth_server
         # run the server in a background thread
-        server_thread = threading.Thread(target = auth_server.run, kwargs=dict(port=config.port))
+        server_thread = threading.Thread(
+            target = auth_server.run,
+            kwargs=dict(port=config.port)
+        )
         server_thread.run()
