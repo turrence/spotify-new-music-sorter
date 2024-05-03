@@ -12,5 +12,5 @@ MarkupSafe==1.1.1
 requests==2.23.0
 six==1.14.0
 spotipy==2.16.1
-urllib3==1.26.5
+urllib3==1.26.18
 Werkzeug==1.0.1
